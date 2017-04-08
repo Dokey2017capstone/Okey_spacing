@@ -28,4 +28,4 @@ for sentence in infile:
 
 infile.close()
 outfile.close()
-#crawling_text는 첫줄과 마지막줄에 공백을 넣어준다, utf-8형식으로 저장
+#crawling_text는 첫줄은 공백을 넣어준다, utf-8형식으로 저장
