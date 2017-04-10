@@ -5,23 +5,19 @@ import pycrfsuite                           #crf
 import sys
 
 
-def input_string_function():        #입력 스트링 받기
-    print 'input : '
+def remove_function(string):        #문자열 공백지우기
+    #string = unicode(string)
 
-    input_string = raw_input()
-    input_string = unicode(input_string)
-
-    # 문자열 공백지우기
     result = ''
 
-    for i in range(len(input_string)):
-        if input_string[i] != ' ':
-            result += input_string[i]
+    for i in range(len(string)):
+        if string[i] != ' ':
+            result += string[i]
 
     return result
 
 
-def feature_function(input_string):
+def feature_function(input_string):     #특징함수 만들기
     feature_string = []  # [[나,3:는],[는,2:나,3:먹],[먹,1:나,2:는,3:다],[는,1:는,2:먹,3:다],[다,1:먹,2:는]]
 
     for i in range(len(input_string)):
@@ -50,7 +46,7 @@ def tag_function(features):     #태그 만들기
     return tag
 
 
-def combine_function(input_string, tag):        #입력 스트링과 태그 합쳐 결과내기
+def result_function(input_string, tag):        #입력 스트링과 태그 합쳐 결과내기
     result=''
 
     for i in range(len(input_string)):
@@ -65,15 +61,17 @@ def combine_function(input_string, tag):        #입력 스트링과 태그 합�
         return result
 
 #최종 띄어쓰기 결과 함수
-def spacing_function():
-    input_string=input_string_function()
+def spacing_function(string):
+    input_string=remove_function(string)
     features=feature_function(input_string)
     tag = tag_function(features)
-    print combine_function(input_string, tag)
-    return combine_function(input_string, tag)
+
+    print result_function(input_string, tag)
+    return result_function(input_string, tag)
 
 #메인
-reload(sys)
-sys.setdefaultencoding('utf-8')
+#reload(sys)
+#sys.setdefaultencoding('utf-8')
 
-spacing_function()
+#string='안녕하세요보기좋네요'
+#spacing_function(string)
