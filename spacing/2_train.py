@@ -44,17 +44,18 @@ def tag_function(pairs):
 
     return tags
 
-
 #main
 crf_trainer = pycrfsuite.Trainer()                  #훈련용 데이터 세트를 유지 관리 - 훈련객체
 
 infile = open('tag_text.txt','r', encoding='utf-8')
 for sentence in infile:
-    pairs = pair_function(sentence)        # [[안,1],[녕,0]]
-    features = feature_function(pairs)      # [[나,3:는],[는,2:나,3:먹],[먹,1:나,2:는,3:다],[는,1:는,2:먹,3:다],[다,1:먹,2:는]]
-    tags = tag_function(pairs)                # [1,0,1,0,1]
+    sentence=sentence.strip()
 
-    crf_trainer.append(features,tags)           #데이터 세트에 (특징항목 / 레이블 순서)를 추가한다. 학습을 위한 데이터 세트 구축
-    crf_trainer.train('crf.crfsuite')           #훈련알고리즘 수행
+    pair = pair_function(sentence)        # [[안,1],[녕,0]]
+    feature = feature_function(pair)      # [[나,3:는],[는,2:나,3:먹],[먹,1:나,2:는,3:다],[는,1:는,2:먹,3:다],[다,1:먹,2:는]]
+    tag = tag_function(pair)                # [1,0,1,0,1]
 
+    crf_trainer.append(feature, tag)  # 데이터 세트에 (특징항목 / 레이블 순서)를 추가한다. 학습을 위한 데이터 세트 구축
+
+crf_trainer.train('crf.crfsuite')
 infile.close()
