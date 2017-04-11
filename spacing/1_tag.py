@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals         #unicode 문제 해결
 from io import open                             #encoding='utf-8'을 하기 위해서
 
@@ -9,9 +8,10 @@ outfile = open('tag_text.txt', 'w',encoding='utf-8')           #태그달아서 
 first_flag=False        #첫 문장 공백
 
 for sentence in infile:
-    if len(sentence)!=1:    #빈 줄 제외
+    sentence = sentence.lstrip()
+
+    if not (len(sentence)==1 or len(sentence)==0):    #빈 줄 제외
         string=''
-        sentence=sentence.lstrip()
 
         for i in range(len(sentence)):
             if i == 0:
