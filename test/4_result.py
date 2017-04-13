@@ -66,7 +66,6 @@ def spacing_function(string):
     features=feature_function(input_string)
     tag = tag_function(features)
 
-    print result_function(input_string, tag)
     return result_function(input_string, tag)
 
 if __name__ == '__main__':
