@@ -69,6 +69,13 @@ def spacing_function(string):
     print result_function(input_string, tag)
     return result_function(input_string, tag)
 
+if __name__ == '__main__':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    result = spacing_function(unicode(sys.argv[1]))
+    
+    print result
+
 #메인
 #reload(sys)
 #sys.setdefaultencoding('utf-8')
