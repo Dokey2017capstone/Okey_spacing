@@ -3,7 +3,7 @@
 import tensorflow as tf
 import numpy as np
 import csv
-z
+
 def batch_function(cnt):  # 배치함수
     x_result = []   #한글
     x_batch = []  # 입력 [[[1,0,0],[1,0,0]]] -> shape(1,2,3) -> batch_size, sequence_length, input_dimension
