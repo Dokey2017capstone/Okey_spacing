@@ -56,10 +56,10 @@ def spacing_result_function(x_result,y_result):     #최종결과
         string_list.append(string.strip())
     print (string_list)
 
-def open_csv(num):  #전처리데이터 만들기
-    csv_file = open('t'+str(num)+'.csv', 'w', newline='')
-    csv_writer = csv.writer(csv_file)
-    return csv_writer,0
+def open_csv(num):
+    train_csv = open('t'+str(num)+'.csv', 'r')
+    csv_reader = csv.reader(train_csv)
+    return list(csv_reader)
 
 #variable
 dir = os.path.dirname(os.path.realpath(__file__))
@@ -74,6 +74,7 @@ syllabe_dic_len = len(syllabe_dic)  # 사전 크기
 syllabe_csv.close()
 
 hidden_size = 2  # 출력사이즈 ([0,1])
+layers = 2
 input_dim = syllabe_dic_len  # one-hot size
 
 # 입력값
@@ -90,7 +91,7 @@ X_one_hot = tf.one_hot(X,input_dim)
 # RNN 구축
 cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)  # num_units=출력사이즈
 cell = tf.contrib.rnn.DropoutWrapper(cell,output_keep_prob=Keep_prob)
-cell = tf.contrib.rnn.MultiRNNCell([cell]*2, state_is_tuple=True)
+cell = tf.contrib.rnn.MultiRNNCell([cell]*layers, state_is_tuple=True)
 initial_state = cell.zero_state(Batch, tf.float32)  # 초기 스테이트
 outputs, _states = tf.nn.dynamic_rnn(cell, X_one_hot,sequence_length=Lengths, initial_state=initial_state, dtype=tf.float32)
 
@@ -113,24 +114,24 @@ saver = tf.train.Saver()
 
 # session 실행
 sess = tf.Session()
-sess.run(tf.global_variables_initializer())
-
-def open_csv(num):
-    train_csv = open('t'+str(num)+'.csv', 'r')
-    csv_reader = csv.reader(train_csv)
-    return list(csv_reader)
+sess.run(tf.global_variables_initializer())                 #처음
+#saver.restore(sess, tf.train.latest_checkpoint('./'))      #이어서
 
 # training
-batch_size=20
-for epoch in range(5):  #epoch
+batch_size=50
+for epoch in range(50):  #epoch
     for i in range(5):      #traing dataset
         csv_list = open_csv(i+1)
 
         for j in range(0,len(csv_list),batch_size):     #batch
             x_result, x_batch, y_batch, lengths, max_length = batch_function(j)
 
-            for k in range(50):
-                sess.run(train, feed_dict={X: x_batch, Y: y_batch, Lengths: lengths, Max_length:max_length, Batch:batch_size, Keep_prob : 0.7})
-                y_result = sess.run(prediction, feed_dict={X: x_batch, Lengths:lengths, Max_length:max_length, Batch:batch_size, Keep_prob: 1.0})
-                spacing_result_function(x_result, y_result)
+            for k in range(100):
+                try:
+                    sess.run(train, feed_dict={X: x_batch, Y: y_batch, Lengths: lengths, Max_length:max_length, Batch:batch_size, Keep_prob : 0.7})
+                    y_result = sess.run(prediction, feed_dict={X: x_batch, Lengths:lengths, Max_length:max_length, Batch:batch_size, Keep_prob: 1.0})
+                    spacing_result_function(x_result, y_result)
+                    print(epoch, ' ', i,' ', j,' ',k)
+                except:
+                    print('error')
     saver.save(sess, dir + '/my-model',global_step=epoch)
