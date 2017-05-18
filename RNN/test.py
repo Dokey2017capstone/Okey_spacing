@@ -83,7 +83,7 @@ csv_reader = csv.reader(test_csv)
 csv_list = list(csv_reader)
 test_csv.close()
 
-hidden_size = 2  # 출력사이즈 ([0,1])
+hidden_size = 2
 layers = 2
 input_dim = syllabe_dic_len  # one-hot size
 
@@ -116,12 +116,13 @@ saver = tf.train.Saver()
 
 #session 실행
 sess = tf.Session()
-saver.restore(sess, tf.train.latest_checkpoint('./'))
+#saver.restore(sess, tf.train.latest_checkpoint('./ckpt/'))
+saver.restore(sess, "./ckpt/my-model-0")
 
 # testing
 cnt=0
 correct=0
-batch_size=5
+batch_size=10
 for i in range(0,len(csv_list),batch_size):
     x_result, x_batch, y_batch, lengths, max_length = batch_function(i)
     y_result = sess.run(prediction, feed_dict={X: x_batch, Lengths:lengths, Max_length:max_length, Batch:batch_size})
