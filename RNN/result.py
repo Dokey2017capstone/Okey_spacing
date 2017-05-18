@@ -35,7 +35,7 @@ syllabe_dic = {n: i for i, n in enumerate(syllabe_list)}
 syllabe_dic_len = len(syllabe_dic)  # 사전 크기
 syllabe_csv.close()
 
-hidden_size = 2  # 출력사이즈 ([0,1])
+hidden_size = 2
 layers = 2
 input_dim = syllabe_dic_len  # one-hot size
 
@@ -66,7 +66,8 @@ saver = tf.train.Saver()
 
 #session 실행
 sess = tf.Session()
-saver.restore(sess, tf.train.latest_checkpoint('./'))
+#saver.restore(sess, tf.train.latest_checkpoint('./ckpt/'))
+saver.restore(sess, "./ckpt/my-model-0")
 
 #resutling
 string='안녕하세요배고프네요'
