@@ -74,7 +74,7 @@ syllabe_dic_len = len(syllabe_dic)  # 사전 크기
 syllabe_csv.close()
 
 hidden_size = 2
-layers = 3
+layers = 2
 input_dim = syllabe_dic_len  # one-hot size
 
 # 입력값
