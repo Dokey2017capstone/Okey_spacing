@@ -73,8 +73,8 @@ syllabe_dic = {n: i for i, n in enumerate(syllabe_list)}
 syllabe_dic_len = len(syllabe_dic)  # 사전 크기
 syllabe_csv.close()
 
-hidden_size = 2  # 출력사이즈 ([0,1])
-layers = 2
+hidden_size = 2
+layers = 3
 input_dim = syllabe_dic_len  # one-hot size
 
 # 입력값
@@ -119,19 +119,18 @@ sess.run(tf.global_variables_initializer())                 #처음
 
 # training
 batch_size=50
-for epoch in range(50):  #epoch
+for epoch in range(2):  #epoch
     for i in range(5):      #traing dataset
         csv_list = open_csv(i+1)
 
         for j in range(0,len(csv_list),batch_size):     #batch
             x_result, x_batch, y_batch, lengths, max_length = batch_function(j)
 
-            for k in range(100):
-                try:
-                    sess.run(train, feed_dict={X: x_batch, Y: y_batch, Lengths: lengths, Max_length:max_length, Batch:batch_size, Keep_prob : 0.7})
-                    y_result = sess.run(prediction, feed_dict={X: x_batch, Lengths:lengths, Max_length:max_length, Batch:batch_size, Keep_prob: 1.0})
-                    spacing_result_function(x_result, y_result)
-                    print(epoch, ' ', i,' ', j,' ',k)
-                except:
-                    print('error')
-    saver.save(sess, dir + '/my-model',global_step=epoch)
+            try:
+                _,Loss = sess.run([train,loss], feed_dict={X: x_batch, Y: y_batch, Lengths: lengths, Max_length:max_length, Batch:batch_size, Keep_prob : 0.5})
+                y_result = sess.run(prediction, feed_dict={X: x_batch, Lengths:lengths, Max_length:max_length, Batch:batch_size, Keep_prob: 1.0})
+                spacing_result_function(x_result, y_result)
+                print(epoch, ' ', i,' ', j,' ',Loss)
+            except:
+                print('error')
+            saver.save(sess, dir + '/ckpt/my-model',global_step=(epoch*10+i))
