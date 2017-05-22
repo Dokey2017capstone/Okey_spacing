@@ -117,7 +117,7 @@ saver = tf.train.Saver()
 #session 실행
 sess = tf.Session()
 #saver.restore(sess, tf.train.latest_checkpoint('./ckpt/'))
-saver.restore(sess, "./ckpt/my-model-0")
+saver.restore(sess, "./ckpt/my-model-4")
 
 # testing
 cnt=0
