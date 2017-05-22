@@ -24,7 +24,7 @@ def open_csv(num):  #전처리데이터 만들기
 
 num=1
 csv_writer, cnt = open_csv(num)
-text_file = open('raw_text1.txt','r',encoding='utf-8')
+text_file = open('raw_text1.txt','r',encoding='utf-8')      #text1,text2,text3
 
 for sentence in text_file:
     sentences = sentence.split('.')
