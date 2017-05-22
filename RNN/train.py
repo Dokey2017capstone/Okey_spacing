@@ -74,7 +74,7 @@ syllabe_dic_len = len(syllabe_dic)  # 사전 크기
 syllabe_csv.close()
 
 hidden_size = 2
-layers = 2
+layers = 3
 input_dim = syllabe_dic_len  # one-hot size
 
 # 입력값
@@ -89,7 +89,7 @@ Keep_prob = tf.placeholder(tf.float32)
 X_one_hot = tf.one_hot(X,input_dim)
 
 # RNN 구축
-cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size, state_is_tuple=True)  # num_units=출력사이즈
+cell = tf.contrib.rnn.BasicLSTMCell(num_units=hidden_size)  # num_units=출력사이즈
 cell = tf.contrib.rnn.DropoutWrapper(cell,output_keep_prob=Keep_prob)
 cell = tf.contrib.rnn.MultiRNNCell([cell]*layers, state_is_tuple=True)
 initial_state = cell.zero_state(Batch, tf.float32)  # 초기 스테이트
@@ -116,21 +116,22 @@ saver = tf.train.Saver()
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())                 #처음
 #saver.restore(sess, tf.train.latest_checkpoint('./'))      #이어서
+#saver.restore(sess,'./ckpt/my-model-3' )
 
 # training
 batch_size=50
-for epoch in range(2):  #epoch
-    for i in range(5):      #traing dataset
+for epoch in range(1):  #epoch
+    for i in range(0,13):      #traing dataset 13
         csv_list = open_csv(i+1)
 
         for j in range(0,len(csv_list),batch_size):     #batch
             x_result, x_batch, y_batch, lengths, max_length = batch_function(j)
 
             try:
-                _,Loss = sess.run([train,loss], feed_dict={X: x_batch, Y: y_batch, Lengths: lengths, Max_length:max_length, Batch:batch_size, Keep_prob : 0.5})
+                _,Loss = sess.run([train,loss], feed_dict={X: x_batch, Y: y_batch, Lengths: lengths, Max_length:max_length, Batch:batch_size, Keep_prob : 0.9})
                 y_result = sess.run(prediction, feed_dict={X: x_batch, Lengths:lengths, Max_length:max_length, Batch:batch_size, Keep_prob: 1.0})
                 spacing_result_function(x_result, y_result)
                 print(epoch, ' ', i,' ', j,' ',Loss)
             except:
                 print('error')
-            saver.save(sess, dir + '/ckpt/my-model',global_step=(epoch*10+i))
+        saver.save(sess, dir + '/ckpt/my-model',global_step=(epoch*10+i))
