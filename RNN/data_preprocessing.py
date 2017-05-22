@@ -24,7 +24,7 @@ def open_csv(num):  #전처리데이터 만들기
 
 num=1
 csv_writer, cnt = open_csv(num)
-text_file = open('NewsML-kang-line.txt','r',encoding='utf-8')
+text_file = open('raw_text1.txt','r',encoding='utf-8')
 
 for sentence in text_file:
     sentences = sentence.split('.')
@@ -32,7 +32,7 @@ for sentence in text_file:
         i=i.strip()
 
         if len(i)>=4 and len(i)<=100:         #훈련 때 메모리방지
-            if not '<' in i:
+            if not '<' in i:        #<>태그있는거 제외
                 string,tag=tag_function(i)   #태그달기
                 try:
                     csv_writer.writerow([string,tag])   #csv입력
