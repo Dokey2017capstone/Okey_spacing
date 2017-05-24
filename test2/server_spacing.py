@@ -2,6 +2,7 @@
 import tensorflow as tf
 import numpy as np
 import csv
+import sys
 
 def string2vec(string):  #한글 벡터화
     x_data = []
@@ -60,14 +61,15 @@ saver = tf.train.Saver()
 
 #session 실행
 sess = tf.Session()
-#saver.restore(sess, tf.train.latest_checkpoint('./ckpt/'))
-saver.restore(sess, "./ckpt/my-model-2")
+#saver.restore(sess, tf.train.latest_checkpoint('/root/Okey_server/okey_spacing/ckpt/'))
+saver.restore(sess, "/root/Okey_server/okey_spacing/ckpt/my-model-2")
 
 #resutling
 while True:
-    string = input('input : ')
+    string = input()
     string = string.replace(' ','')      #공백제거
     x_vec = string2vec(string)
     y_result = sess.run(prediction, feed_dict={X: x_vec, length:len(string)})
     result = spacing_result_function([string], y_result)
     print(result)
+    sys.stdout.flush()
